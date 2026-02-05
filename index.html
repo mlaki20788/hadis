@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حدیث ❤️</title>
+  <meta name="theme-color" content="#ff4d6d" />
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#2a0b2a;
+      --card:rgba(255,255,255,.08);
+      --stroke:rgba(255,255,255,.14);
+      --txt:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --accent:#ff4d6d;
+      --accent2:#ffb3c1;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Vazirmatn", "IRANSans", sans-serif;
+      color:var(--txt);
+      background: radial-gradient(1200px 900px at 20% 10%, rgba(255,77,109,.25), transparent 60%),
+                  radial-gradient(900px 800px at 90% 30%, rgba(255,179,193,.18), transparent 55%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+    .wrap{max-width:720px;margin:0 auto;padding:24px 16px 64px}
+    .header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      padding:18px 18px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:sticky; top:12px; z-index:5;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex;flex-direction:column;gap:2px}
+    .brand b{font-size:16px; letter-spacing:.2px}
+    .brand span{font-size:12px; color:var(--muted)}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.15);
+      font-size:12px; color:var(--muted);
+      white-space:nowrap;
+    }
+    .card{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero{
+      padding:26px 18px 18px;
+      background: radial-gradient(700px 400px at 40% 0%, rgba(255,77,109,.20), transparent 55%),
+                  linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+    }
+    .title{font-size:22px;line-height:1.5;margin:0 0 10px}
+    .type{
+      font-size:15px; line-height:1.95;
+      color:var(--muted);
+      min-height:84px;
+      margin:0;
+      white-space:pre-wrap;
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap; padding:16px 18px 20px}
+    button{
+      appearance:none;border:none;cursor:pointer;
+      padding:12px 14px;border-radius:14px;font-weight:800;
+      color:#111;background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 25px rgba(255,77,109,.25);
+      flex:1;min-width:160px;
+    }
+    button.secondary{
+      background:rgba(255,255,255,.08);
+      color:var(--txt);
+      border:1px solid var(--stroke);
+      box-shadow:none;
+      font-weight:650;
+    }
+    .grid{display:grid;grid-template-columns: 1fr 1fr;gap:12px;padding: 0 18px 18px}
+    .stat{
+      padding:14px 14px;border:1px solid var(--stroke);
+      border-radius:16px;background:rgba(0,0,0,.12);
+    }
+    .stat .k{font-size:12px;color:var(--muted)}
+    .stat .v{font-size:18px;margin-top:6px;font-weight:900}
+    .note{padding: 0 18px 18px;color:var(--muted);font-size:12px;line-height:1.9}
+
+    .modal{
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.55);
+      z-index:50;
+      padding:18px;
+    }
+    .modal.show{display:flex}
+    .modal-box{
+      width:min(640px, 100%);
+      border-radius:24px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.25));
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding:16px 18px;
+      display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .modal-head b{font-size:14px}
+    .x{
+      width:38px;height:38px;border-radius:12px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      color:var(--txt); font-size:18px;
+    }
+    .modal-body{padding:18px}
+    .love{font-size:16px; line-height:2.05; white-space:pre-wrap; color:rgba(255,255,255,.90)}
+
+    .heart{
+      position:fixed; bottom:-40px;
+      font-size:18px;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,.35));
+      animation: floatUp linear forwards;
+      z-index:2; pointer-events:none; opacity:.9;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(0) translateX(0) scale(1); opacity:.0; }
+      10%{opacity:.9}
+      to{ transform: translateY(-110vh) translateX(var(--drift)) scale(1.35); opacity:0; }
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns:1fr}
+      .title{font-size:20px}
+      button{min-width:140px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="brand">
+      <b>ولنتاین ما ❤️</b>
+      <span>برای حدیث — از طرف مهدی</span>
+    </div>
+    <div class="pill"><span>💘</span><span id="today"></span></div>
+  </div>
+
+  <div class="card">
+    <div class="hero">
+      <h1 class="title">سلام حدیثِ قشنگم 🌙</h1>
+      <p class="type" id="typeArea"></p>
+    </div>
+
+    <div class="actions">
+      <button id="btnReveal">بازش کن 😳</button>
+      <button class="secondary" id="btnHearts">قلب بارون کن ❤️</button>
+    </div>
+
+    <div class="grid">
+      <div class="stat">
+        <div class="k">تا ولنتاین مونده</div>
+        <div class="v" id="countdown">…</div>
+      </div>
+      <div class="stat">
+        <div class="k">قول من به تو</div>
+        <div class="v" id="status">هر روز بیشتر دوستت دارم</div>
+      </div>
+    </div>
+
+    <div class="note">
+      نکته: اگه یه آهنگ عاشقانه پلی کنی و همزمان این صفحه رو باز نگه داری، جادو می‌شه 🎵
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <b>پیام مخفی برای حدیث ❤️</b>
+      <button class="x" id="btnClose" aria-label="close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="love" id="loveText"></div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="secondary" id="btnCopy">کپی متن ✨</button>
+        <button id="btnMoreHearts">یکی دیگه ❤️</button>
+      </div>
+      <div style="margin-top:10px;color:rgba(255,255,255,.65);font-size:12px;line-height:1.8">
+        اگر خواستی جواب بده: «آره… ولنتاین من باش» 😌
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const valentineDate = new Date(2026, 1, 14, 0, 0, 0); // 14 Feb 2026
+
+  const lines = [
+    "یه سورپرایز کوچیک… ولی از ته دل ❤️",
+    "حدیثِ عزیزم…",
+    "از همون لحظه‌ای که کنار تو آروم شدم، فهمیدم یه چیزی تو من عوض شده.",
+    "و یه خاطره هست که همیشه با لبخند یادم میاد:",
+    "وقتی اولین بار دستام رو روی صورت کوچولوت گذاشتم و لب‌هاتو بوسیدم…",
+    "همون‌جا دنیا برای من یه رنگ دیگه گرفت.",
+    "ولنتاین امسال فقط می‌خوام بدونی:",
+    "تو دلیلِ قشنگِ دوست داشتنِ منی…",
+    "— مهدی ❤️"
+  ];
+
+  const secret =
+`حدیثِ قشنگم،
+تو برای من فقط “دوست داشتن” نیستی…
+تو آرامشِ قلبمی، لبخندِ روزهای سختی، و قشنگ‌ترین اتفاقِ زندگی من.
+
+می‌خوام هر سال کنار تو،
+این روز رو صد بار عاشق‌تر جشن بگیرم.
+
+ولنتاین مبارک ❤️
+با عشقِ بی‌آخر،
+مهدی`;
+
+  const $ = (id)=>document.getElementById(id);
+
+  function formatFaDate(d){
+    try { return new Intl.DateTimeFormat('fa-IR', { dateStyle:'full' }).format(d); }
+    catch { return d.toLocaleDateString(); }
+  }
+
+  function typewriter(arr, el){
+    el.textContent = "";
+    let i=0, j=0;
+    const tick = ()=>{
+      if(i>=arr.length) return;
+      const line = arr[i];
+      el.textContent += line[j] ?? "";
+      j++;
+      if(j>line.length){
+        el.textContent += "\n";
+        i++; j=0;
+        setTimeout(tick, 460);
+      }else{
+        setTimeout(tick, 22);
+      }
+    };
+    tick();
+  }
+
+  function spawnHearts(amount=18){
+    const symbols=["❤️","💖","💘","💝","💕","💗"];
+    for(let i=0;i<amount;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+      h.style.left=(Math.random()*100)+"vw";
+      h.style.setProperty("--drift", (Math.random()*80-40).toFixed(0)+"px");
+      const dur=(6+Math.random()*5).toFixed(2);
+      h.style.animationDuration=dur+"s";
+      h.style.fontSize=(16+Math.random()*18).toFixed(0)+"px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(), (parseFloat(dur)*1000)+200);
+    }
+  }
+
+  function updateCountdown(){
+    const now=new Date();
+    const diff=valentineDate-now;
+    if(diff<=0){
+      $("countdown").textContent="امروز 💘";
+      $("status").textContent="ولنتاین مبارک 😍";
+      return;
+    }
+    const s=Math.floor(diff/1000);
+    const d=Math.floor(s/86400);
+    const h=Math.floor((s%86400)/3600);
+    const m=Math.floor((s%3600)/60);
+    $("countdown").textContent=`${d} روز و ${h} ساعت و ${m} دقیقه`;
+  }
+
+  $("today").textContent = formatFaDate(new Date());
+  $("loveText").textContent = secret;
+
+  typewriter(lines, $("typeArea"));
+  updateCountdown();
+  setInterval(updateCountdown, 1000*10);
+
+  $("btnReveal").addEventListener("click", ()=>{ $("modal").classList.add("show"); spawnHearts(26); });
+  $("btnClose").addEventListener("click", ()=> $("modal").classList.remove("show"));
+  $("modal").addEventListener("click", (e)=>{ if(e.target===$("modal")) $("modal").classList.remove("show"); });
+
+  $("btnHearts").addEventListener("click", ()=>spawnHearts(20));
+  $("btnMoreHearts").addEventListener("click", ()=>spawnHearts(28));
+
+  $("btnCopy").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText($("loveText").textContent);
+      $("btnCopy").textContent="کپی شد ✅";
+      setTimeout(()=> $("btnCopy").textContent="کپی متن ✨", 1600);
+    }catch{
+      $("btnCopy").textContent="کپی نشد 😅";
+      setTimeout(()=> $("btnCopy").textContent="کپی متن ✨", 1600);
+    }
+  });
+
+  setTimeout(()=>spawnHearts(14), 900);
+</script>
+</body>
+</html>
