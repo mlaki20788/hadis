@@ -67,7 +67,7 @@
     .type{
       font-size:15px; line-height:1.95;
       color:var(--muted);
-      min-height:84px;
+      min-height:92px;
       margin:0;
       white-space:pre-wrap;
     }
@@ -127,18 +127,35 @@
     .modal-body{padding:18px}
     .love{font-size:16px; line-height:2.05; white-space:pre-wrap; color:rgba(255,255,255,.90)}
 
+    /* Floating hearts */
     .heart{
-      position:fixed; bottom:-40px;
+      position:fixed;
       font-size:18px;
       filter: drop-shadow(0 8px 10px rgba(0,0,0,.35));
       animation: floatUp linear forwards;
       z-index:2; pointer-events:none; opacity:.9;
+    }
+    .heart.up{
+      bottom:-40px;
+      top:auto;
+      animation-name: floatUp;
+    }
+    .heart.down{
+      top:-40px;
+      bottom:auto;
+      animation-name: floatDown;
     }
     @keyframes floatUp{
       from{ transform: translateY(0) translateX(0) scale(1); opacity:.0; }
       10%{opacity:.9}
       to{ transform: translateY(-110vh) translateX(var(--drift)) scale(1.35); opacity:0; }
     }
+    @keyframes floatDown{
+      from{ transform: translateY(0) translateX(0) scale(1); opacity:.0; }
+      10%{opacity:.9}
+      to{ transform: translateY(110vh) translateX(var(--drift)) scale(1.25); opacity:0; }
+    }
+
     @media (max-width: 520px){
       .grid{grid-template-columns:1fr}
       .title{font-size:20px}
@@ -147,6 +164,7 @@
   </style>
 </head>
 <body>
+
 <div class="wrap">
   <div class="header">
     <div class="brand">
@@ -163,8 +181,8 @@
     </div>
 
     <div class="actions">
-      <button id="btnReveal">بازش کن 😳</button>
-      <button class="secondary" id="btnHearts">قلب بارون کن ❤️</button>
+      <button id="btnReveal">بازش کن</button>
+      <button class="secondary" id="btnHearts">قلب بارون ❤️</button>
     </div>
 
     <div class="grid">
@@ -179,7 +197,7 @@
     </div>
 
     <div class="note">
-      نکته: اگه یه آهنگ عاشقانه پلی کنی و همزمان این صفحه رو باز نگه داری، جادو می‌شه 🎵
+      نکته: اگه آهنگ رو روشن کنی و همزمان این صفحه رو باز نگه داری، جادو می‌شه 🎵
     </div>
   </div>
 </div>
@@ -203,8 +221,16 @@
   </div>
 </div>
 
+<!-- موسیقی پس‌زمینه: باید فایل bgm.mp3 کنار همین index.html داخل ریپو آپلود بشه -->
+<audio id="bgm" preload="auto" loop>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
 <script>
   const valentineDate = new Date(2026, 1, 14, 0, 0, 0); // 14 Feb 2026
+  const $ = (id)=>document.getElementById(id);
+
+  const bgm = $("bgm");
 
   const lines = [
     "یه سورپرایز کوچیک… ولی از ته دل ❤️",
@@ -230,8 +256,6 @@
 با عشقِ بی‌آخر،
 مهدی`;
 
-  const $ = (id)=>document.getElementById(id);
-
   function formatFaDate(d){
     try { return new Intl.DateTimeFormat('fa-IR', { dateStyle:'full' }).format(d); }
     catch { return d.toLocaleDateString(); }
@@ -256,19 +280,25 @@
     tick();
   }
 
-  function spawnHearts(amount=18){
-    const symbols=["❤️","💖","💘","💝","💕","💗"];
+  // قلب‌ها در دو جهت + آیکن‌های متفاوت
+  function spawnHearts(amount=18, direction="up"){
+    const upSymbols = ["❤️","💖","💘","💝","💕","💗"];
+    const downSymbols = ["🩷","🤍","💜","💙","💚","💛","🖤","💞","✨"];
+    const symbols = direction === "down" ? downSymbols : upSymbols;
+
     for(let i=0;i<amount;i++){
       const h=document.createElement("div");
-      h.className="heart";
+      h.className="heart " + (direction === "down" ? "down" : "up");
       h.textContent=symbols[Math.floor(Math.random()*symbols.length)];
       h.style.left=(Math.random()*100)+"vw";
-      h.style.setProperty("--drift", (Math.random()*80-40).toFixed(0)+"px");
-      const dur=(6+Math.random()*5).toFixed(2);
+      h.style.setProperty("--drift", (Math.random()*90-45).toFixed(0)+"px");
+
+      const dur=(5.5+Math.random()*5).toFixed(2);
       h.style.animationDuration=dur+"s";
-      h.style.fontSize=(16+Math.random()*18).toFixed(0)+"px";
+      h.style.fontSize=(16+Math.random()*20).toFixed(0)+"px";
+
       document.body.appendChild(h);
-      setTimeout(()=>h.remove(), (parseFloat(dur)*1000)+200);
+      setTimeout(()=>h.remove(), (parseFloat(dur)*1000)+300);
     }
   }
 
@@ -294,12 +324,35 @@
   updateCountdown();
   setInterval(updateCountdown, 1000*10);
 
-  $("btnReveal").addEventListener("click", ()=>{ $("modal").classList.add("show"); spawnHearts(26); });
+  // بازش کن: مودال + قلب از دو جهت + شروع موزیک (به خاطر کلیک روی موبایل مجازه)
+  $("btnReveal").addEventListener("click", async ()=>{
+    $("modal").classList.add("show");
+    spawnHearts(18, "up");
+    spawnHearts(18, "down");
+
+    try{
+      if (bgm) {
+        bgm.currentTime = 0;
+        await bgm.play();
+      }
+    }catch(e){
+      // بعضی گوشی‌ها سخت‌گیرن؛ با تعامل بعدی هم پخش می‌شه
+    }
+  });
+
   $("btnClose").addEventListener("click", ()=> $("modal").classList.remove("show"));
   $("modal").addEventListener("click", (e)=>{ if(e.target===$("modal")) $("modal").classList.remove("show"); });
 
-  $("btnHearts").addEventListener("click", ()=>spawnHearts(20));
-  $("btnMoreHearts").addEventListener("click", ()=>spawnHearts(28));
+  // قلب بارون: هم از پایین به بالا هم از بالا به پایین
+  $("btnHearts").addEventListener("click", ()=>{
+    spawnHearts(18, "up");
+    spawnHearts(18, "down");
+  });
+
+  $("btnMoreHearts").addEventListener("click", ()=>{
+    spawnHearts(24, "up");
+    spawnHearts(24, "down");
+  });
 
   $("btnCopy").addEventListener("click", async ()=>{
     try{
@@ -312,7 +365,11 @@
     }
   });
 
-  setTimeout(()=>spawnHearts(14), 900);
+  // موج اول
+  setTimeout(()=>{
+    spawnHearts(10, "up");
+    spawnHearts(10, "down");
+  }, 900);
 </script>
 </body>
 </html>
